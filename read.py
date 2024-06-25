@@ -50,7 +50,7 @@ async def send_telegram_message(game, status, srp):
     
     processed_text = game.replace('-', ' ').upper()
 
-    message = f"<b>{processed_text}</b>\nStatus : {status} {status_icon},\nSRP : {srp}"
+    message = f"<b>{processed_text}</b>\nStatus : {status} {status_icon},\nSRP : {srp}%"
     await bot.send_message(chat_id=telegram_channel_id, text=message, parse_mode=ParseMode.HTML)
 
 # Function to check and handle changes
@@ -102,6 +102,7 @@ async def main():
         if srp_tag:
             srp_text = srp_tag.text
             srp_value = srp_text.split(':')[-1].strip()
+            srp_value = srp_value.rstrip('%')
         else:
             srp_value = None
 
