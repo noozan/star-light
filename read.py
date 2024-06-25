@@ -14,7 +14,8 @@ games = [
     "Starlight-Princess",
     "Sugar-Rush-1000",
     "Sugar-Rush",
-    "Fire-Portals"
+    "Fire-Portals",
+    "Wanted-Dead-or-a-Wild"
 ]
 
 # Base URL
