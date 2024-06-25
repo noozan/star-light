@@ -102,16 +102,13 @@ async def main():
         if srp_tag:
             srp_text = srp_tag.text
             srp_value = srp_text.split(':')[-1].strip()
+            # Remove '%' at the end of srp_value
             srp_value = srp_value.rstrip('%')
         else:
             srp_value = None
 
         # Check and handle changes
         await check_and_handle_changes(game, game_status, srp_value)
-        
-        # Introduce a 10-second delay before processing the next game
-        await asyncio.sleep(1)
-
 
     # Save the updated previous_results to the file
     with open(results_file, 'w') as file:
