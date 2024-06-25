@@ -50,7 +50,7 @@ async def send_telegram_message(game, status, srp):
     
     processed_text = game.replace('-', ' ').upper()
 
-    message = f"<b>{processed_text}</b>\nStatus : {status} {status_icon},\nSRP : {srp}%"
+    message = f"<b>{processed_text}</b>\nStatus : {status} {status_icon}\nSRP : {srp}%"
     await bot.send_message(chat_id=telegram_channel_id, text=message, parse_mode=ParseMode.HTML)
 
 # Function to check and handle changes
@@ -58,8 +58,8 @@ async def check_and_handle_changes(game, status, srp):
     previous_status = previous_results.get(game, {}).get("status")
     previous_srp = previous_results.get(game, {}).get("SRP")
 
-    # Check for changes in status or significant SRP change when status is Hot
-    if status != previous_status or (status == "Hot" and srp and previous_srp and abs(float(srp) - float(previous_srp)) >= 1.0):
+    # Check for changes in status or significant SRP increase when status is Hot
+    if status != previous_status or (status == "Hot" and srp and previous_srp and float(srp) > float(previous_srp)):
         print(f"Sending message for {game}")
         await send_telegram_message(game, status, srp)
 
