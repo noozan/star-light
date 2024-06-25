@@ -1,0 +1,30 @@
+{
+    "Starlight-Princess-1000": {
+        "status": "Cold",
+        "SRP": "3.43%"
+    },
+    "Gates-of-Olympus": {
+        "status": "Cold",
+        "SRP": "63.76%"
+    },
+    "Gates-of-Olympus-1000": {
+        "status": "Cold",
+        "SRP": "81.26%"
+    },
+    "Starlight-Princess": {
+        "status": "Hot",
+        "SRP": "104.16%"
+    },
+    "Sugar-Rush-1000": {
+        "status": "Cold",
+        "SRP": "78.00%"
+    },
+    "Sugar-Rush": {
+        "status": "Cold",
+        "SRP": "1.28%"
+    },
+    "Fire-Portals": {
+        "status": "Cold",
+        "SRP": "2.81%"
+    }
+}
