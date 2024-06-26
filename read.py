@@ -15,7 +15,11 @@ games = [
     "Sugar-Rush-1000",
     "Sugar-Rush",
     "Fire-Portals",
-    "Wanted-Dead-or-a-Wild"
+    "Wanted-Dead-or-a-Wild",
+    "Book-of-Dead",
+    "Sweet-Bonanza",
+    "Big-Bass-Splash",
+    "Big-Bass-Bonanza"
 ]
 
 # Base URL
