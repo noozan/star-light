@@ -44,9 +44,6 @@ if os.path.exists(results_file):
 else:
     previous_results = {}
 
-# Dictionary to store the new status and SRP of each game
-new_results = {}
-
 # Function to send message to Telegram channel
 async def send_telegram_message(game, status, srp):
     if status == "Hot":
@@ -59,43 +56,56 @@ async def send_telegram_message(game, status, srp):
     processed_text = game.replace('-', ' ').upper()
 
     message = f"<b>{processed_text}</b>\nStatus : {status} {status_icon}\nSRP : {srp}%"
+    sent_message = await bot.send_message(chat_id=telegram_channel_id, text=message, parse_mode=ParseMode.HTML)
+    return sent_message.message_id
 
-    # Attempt to delete previous message if exists
-    try:
-        if game in previous_results and 'message_id' in previous_results[game]:
-            await bot.delete_message(chat_id=telegram_channel_id, message_id=previous_results[game]['message_id'])
-    except error.BadRequest as e:
-        if e.message == 'Message to delete not found':
-            pass  # Ignore if the message is already deleted
-        else:
-            print(f"{datetime.now()} - Error deleting previous message for {game}: {e}")
-    except error.TelegramError as e:
-        print(f"{datetime.now()} - Telegram error deleting previous message for {game}: {e}")
-
-    # Send new message
-    try:
-        sent_message = await bot.send_message(chat_id=telegram_channel_id, text=message, parse_mode=ParseMode.HTML)
-        # Update previous_results with the new message_id
-        previous_results[game] = {"status": status, "SRP": srp, "message_id": sent_message.message_id}
-        print(f"{datetime.now()} - Sent message for {game}")
-    except error.TelegramError as e:
-        print(f"{datetime.now()} - Error sending message for {game}: {e}")
+# Function to delete message from Telegram channel
+async def delete_telegram_message(game):
+    if game in previous_results and 'message_id' in previous_results[game]:
+        message_id = previous_results[game]['message_id']
+        try:
+            await bot.delete_message(chat_id=telegram_channel_id, message_id=message_id)
+            print(f"Deleted previous message for {game}")
+        except error.BadRequest as e:
+            if e.message == 'Message to delete not found':
+                print(f"Message to delete not found for {game}")
+            else:
+                print(f"Error deleting message for {game}: {e}")
+        except error.TelegramError as e:
+            print(f"Telegram error deleting message for {game}: {e}")
 
 # Function to check and handle changes
 async def check_and_handle_changes(game, status, srp):
     previous_status = previous_results.get(game, {}).get("status")
     previous_srp = previous_results.get(game, {}).get("SRP")
+    previous_message_id = previous_results.get(game, {}).get("message_id")
 
     # Check for changes in status or significant SRP increase when status is Hot
     if status != previous_status or (status == "Hot" and srp and previous_srp and float(srp) > float(previous_srp)):
-        print(f"{datetime.now()} - Sending message for {game}")
-        await send_telegram_message(game, status, srp)
+        print(f"Handling changes for {game}")
 
-    # Update previous_results with the latest data
-    previous_results[game] = {"status": status, "SRP": srp}
+        # Delete previous message if exists
+        await delete_telegram_message(game)
+
+        # Send new message
+        new_message_id = await send_telegram_message(game, status, srp)
+
+        # Update previous_results with the latest data including the message_id
+        previous_results[game] = {
+            "status": status,
+            "SRP": srp,
+            "last_updated": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            "message_id": new_message_id
+        }
+    # Only print messages when there are actual changes
+    elif status == previous_status and (status != "Hot" or not (srp and previous_srp and float(srp) > float(previous_srp))):
+        pass  # Skip printing "no changes" messages
 
 # Main function to run the scraping and checking
 async def main():
+    start_time = datetime.now()
+    print(f"Script started at: {start_time}")
+
     # Loop through each game identifier
     for game in games:
         # Construct the full URL for each game
@@ -105,7 +115,7 @@ async def main():
         response = requests.get(url)
 
         if response.status_code != 200:
-            print(f"{datetime.now()} - Failed to retrieve data for {game}")
+            print(f"Failed to retrieve data for {game}")
             continue
 
         # Parse the HTML content using BeautifulSoup
@@ -138,15 +148,16 @@ async def main():
         # Check and handle changes
         await check_and_handle_changes(game, game_status, srp_value)
 
-        # Wait for 10 seconds before processing the next game
-        await asyncio.sleep(1)
+        # Wait for a short interval before processing the next game
+        await asyncio.sleep(1)  # Adjust this interval as needed
 
     # Save the updated previous_results to the file
     with open(results_file, 'w') as file:
         json.dump(previous_results, file, indent=4)
 
+    end_time = datetime.now()
+    print(f"Script finished at: {end_time}")
+    print(f"Total execution time: {end_time - start_time}")
+
 # Run the main function
-if __name__ == "__main__":
-    print(f"{datetime.now()} - Script started.")
-    asyncio.run(main())
-    print(f"{datetime.now()} - Script finished.")
+asyncio.run(main())
