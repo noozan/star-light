@@ -1,74 +1,74 @@
 {
     "Gates-of-Olympus": {
         "status": "Cold",
-        "SRP": "84.50",
-        "last_edited": "2024-07-01 19:21:08",
-        "message_id": 1450
+        "SRP": "81.29",
+        "last_edited": "2024-07-02 00:06:06",
+        "message_id": 1548
     },
     "Gates-of-Olympus-1000": {
         "status": "Cold",
-        "SRP": "63.10",
-        "last_edited": "2024-07-01 19:21:12",
-        "message_id": 1451
+        "SRP": "88.16",
+        "last_edited": "2024-07-02 00:06:09",
+        "message_id": 1549
     },
     "Starlight-Princess-1000": {
         "status": "Cold",
-        "SRP": "45.36",
-        "last_edited": "2024-07-01 19:21:15",
-        "message_id": 1452
+        "SRP": "1.35",
+        "last_edited": "2024-07-02 00:06:13",
+        "message_id": 1550
     },
     "Starlight-Princess": {
-        "status": "Cold",
-        "SRP": "63.90",
-        "last_edited": "2024-07-01 19:21:18",
-        "message_id": 1453
+        "status": "Hot",
+        "SRP": "129.69",
+        "last_edited": "2024-07-02 00:06:17",
+        "message_id": 1561
     },
     "Sugar-Rush-1000": {
-        "status": "Hot",
-        "SRP": "98.12",
-        "last_edited": "2024-07-01 19:21:22",
-        "message_id": 1462
+        "status": "Cold",
+        "SRP": "93.48",
+        "last_edited": "2024-07-02 00:06:20",
+        "message_id": 1552
     },
     "Sugar-Rush": {
         "status": "Cold",
-        "SRP": "1.28",
-        "last_edited": "2024-07-01 19:21:26",
-        "message_id": 1463
+        "SRP": "1.91",
+        "last_edited": "2024-07-02 00:06:23",
+        "message_id": 1553
     },
     "Fire-Portals": {
         "status": "Cold",
-        "SRP": "1.63",
-        "last_edited": "2024-07-01 19:21:30",
-        "message_id": 1456
+        "SRP": "4.70",
+        "last_edited": "2024-07-02 00:06:26",
+        "message_id": 1554
     },
     "Wanted-Dead-or-a-Wild": {
         "status": "Cold",
-        "SRP": "94.02",
-        "last_edited": "2024-07-01 19:21:34",
-        "message_id": 1457
+        "SRP": "71.52",
+        "last_edited": "2024-07-02 00:06:30",
+        "message_id": 1555
     },
     "Book-of-Dead": {
         "status": "Cold",
-        "SRP": "89.28",
-        "last_edited": "2024-07-01 19:21:37",
-        "message_id": 1458
+        "SRP": "87.92",
+        "last_edited": "2024-07-02 00:06:33",
+        "message_id": 1556
     },
     "Sweet-Bonanza": {
         "status": "Cold",
-        "SRP": "94.19",
-        "last_edited": "2024-07-01 19:21:41",
-        "message_id": 1459
+        "SRP": "87.57",
+        "last_edited": "2024-07-02 00:06:37",
+        "message_id": 1557
     },
     "Big-Bass-Splash": {
         "status": "Cold",
-        "SRP": "84.09",
-        "last_edited": "2024-07-01 19:21:45",
-        "message_id": 1460
+        "SRP": "73.42",
+        "last_edited": "2024-07-02 00:06:40",
+        "message_id": 1558
     },
     "Big-Bass-Bonanza": {
         "status": "Cold",
-        "SRP": "86.08",
-        "last_edited": "2024-07-01 19:21:48",
-        "message_id": 1461
+        "SRP": "88.02",
+        "last_edited": "2024-07-02 00:06:44",
+        "message_id": 1559
     }
 }
