@@ -2,27 +2,12 @@ import requests
 from bs4 import BeautifulSoup
 import json
 import os
-from telegram import Bot
 import asyncio
-from telegram.constants import ParseMode
-from datetime import datetime
+from telegram import Bot, ParseMode
 from telegram.error import BadRequest
+from datetime import datetime
+from games_list import games  # Importing the games list from games_list.py
 
-# List of game identifiers
-games = [
-    "Gates-of-Olympus",
-    "Gates-of-Olympus-1000",
-    "Starlight-Princess-1000",
-    "Starlight-Princess",
-    "Sugar-Rush-1000",
-    "Sugar-Rush",
-    "Fire-Portals",
-    "Wanted-Dead-or-a-Wild",
-    "Book-of-Dead",
-    "Sweet-Bonanza",
-    "Big-Bass-Splash",
-    "Big-Bass-Bonanza"
-]
 
 # Base URL
 base_url = 'https://slotcatalog.com/en/slots'
@@ -47,15 +32,8 @@ else:
 
 # Function to send a message to the Telegram channel
 async def send_telegram_message(game, status, srp):
-    if status == "Hot":
-        status_icon = "🔥"
-    elif status == "Cold":
-        status_icon = "❄️"
-    else:
-        status_icon = ""
-    
+    status_icon = "🔥" if status == "Hot" else "❄️" if status == "Cold" else ""
     processed_text = game.replace('-', ' ').upper()
-
     message = f"<b>{processed_text}</b>\nStatus : {status} {status_icon}\nSRP : {srp}%"
     sent_message = await bot.send_message(chat_id=telegram_channel_id, text=message, parse_mode=ParseMode.HTML)
     return sent_message.message_id
@@ -69,15 +47,8 @@ async def delete_telegram_message(message_id):
 
 # Function to edit a message in the Telegram channel
 async def edit_telegram_message(message_id, game, status, srp):
-    if status == "Hot":
-        status_icon = "🔥"
-    elif status == "Cold":
-        status_icon = "❄️"
-    else:
-        status_icon = ""
-    
+    status_icon = "🔥" if status == "Hot" else "❄️" if status == "Cold" else ""
     processed_text = game.replace('-', ' ').upper()
-
     message = f"<b>{processed_text}</b>\nStatus : {status} {status_icon}\nSRP : {srp}%"
     try:
         await bot.edit_message_text(chat_id=telegram_channel_id, message_id=message_id, text=message, parse_mode=ParseMode.HTML)
@@ -95,7 +66,7 @@ async def check_and_handle_changes(game, status, srp):
     previous_srp = previous_results.get(game, {}).get("SRP")
     previous_message_id = previous_results.get(game, {}).get("message_id")
 
-    # Check for changes in status or significant SRP increase when status is Hot
+    # Check conditions for handling changes
     if status != previous_status:
         if previous_message_id:
             await delete_telegram_message(previous_message_id)
@@ -104,6 +75,13 @@ async def check_and_handle_changes(game, status, srp):
         if previous_message_id:
             await delete_telegram_message(previous_message_id)
         new_message_id = await send_telegram_message(game, status, srp)
+    elif status == "Hot" and srp and previous_srp and float(srp) < float(previous_srp):
+        if previous_message_id:
+            updated = await edit_telegram_message(previous_message_id, game, status, srp)
+            if not updated:
+                new_message_id = await send_telegram_message(game, status, srp)
+            else:
+                new_message_id = previous_message_id
     elif status == "Cold" and srp and previous_srp and float(srp) != float(previous_srp):
         if previous_message_id:
             updated = await edit_telegram_message(previous_message_id, game, status, srp)
@@ -111,8 +89,6 @@ async def check_and_handle_changes(game, status, srp):
                 new_message_id = await send_telegram_message(game, status, srp)
             else:
                 new_message_id = previous_message_id
-        else:
-            new_message_id = await send_telegram_message(game, status, srp)
     else:
         new_message_id = previous_message_id
 
