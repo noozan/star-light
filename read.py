@@ -2,10 +2,11 @@ import requests
 from bs4 import BeautifulSoup
 import json
 import os
+from telegram import Bot
 import asyncio
-from telegram import Bot, ParseMode
-from telegram.error import BadRequest
+from telegram.constants import ParseMode
 from datetime import datetime
+from telegram.error import BadRequest
 from games_list import games  # Importing the games list from games_list.py
 
 
