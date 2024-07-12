@@ -17,8 +17,8 @@ base_url = 'https://slotcatalog.com/en/slots'
 results_file = 'game_statuses.json'
 
 # Telegram bot token and channel ID
-telegram_bot_token = 'YOUR_TELEGRAM_BOT_TOKEN'
-telegram_channel_id = 'YOUR_TELEGRAM_CHANNEL_ID'
+telegram_bot_token = '7320334242:AAE2wIj6HoAcm8pBmdXUCR_5ylcSLDEkbMY'
+telegram_channel_id = '-1002193508333'
 
 
 # Initialize the Telegram bot
@@ -43,11 +43,18 @@ async def send_telegram_message(game, status, srp):
     return sent_message.message_id
 
 # Function to delete a message from the Telegram channel
-async def delete_telegram_message(message_id):
+async def delete_telegram_message(message_id, game_name=None):
     try:
         await bot.delete_message(chat_id=telegram_channel_id, message_id=message_id)
-    except Exception as e:
-        print(f"{datetime.now()} - Failed to delete message: {e}")
+    except BadRequest as e:
+        if "message to delete not found" in str(e).lower() and game_name:
+            # Find and delete the message by game name if message_id is not found
+            for game, data in previous_results.items():
+                if game == game_name and "message_id" in data:
+                    await bot.delete_message(chat_id=telegram_channel_id, message_id=data["message_id"])
+                    break
+        else:
+            print(f"{datetime.now()} - Failed to delete message: {e}")
 
 # Function to edit a message in the Telegram channel
 async def edit_telegram_message(message_id, game, status, srp, prev_srp):
@@ -76,11 +83,11 @@ async def check_and_handle_changes(game, status, srp):
     # Check conditions for handling changes
     if status != previous_status:
         if previous_message_id:
-            await delete_telegram_message(previous_message_id)
+            await delete_telegram_message(previous_message_id, game)
         new_message_id = await send_telegram_message(game, status, srp)
     elif status == "Hot" and srp and previous_srp and float(srp) > float(previous_srp):
         if previous_message_id:
-            await delete_telegram_message(previous_message_id)
+            await delete_telegram_message(previous_message_id, game)
         new_message_id = await send_telegram_message(game, status, srp)
     elif status == "Hot" and srp and previous_srp and float(srp) < float(previous_srp):
         if previous_message_id:
