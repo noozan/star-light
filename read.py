@@ -35,7 +35,7 @@ else:
 async def send_telegram_message(game, status, srp):
     status_icon = "🔥" if status == "Hot" else "❄️" if status == "Cold" else ""
     processed_text = game.replace('-', ' ').upper()
-    last_updated = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    last_updated = datetime.now().strftime('%Y-%m-%d %H:%M')
     message = (f"<b>{processed_text}</b>\nStatus : {status} {status_icon}\n"
                f"SRP : {srp}%\n"
                f"<i>Last updated: {last_updated}</i>")
@@ -60,9 +60,17 @@ async def delete_telegram_message(message_id, game_name=None):
 async def edit_telegram_message(message_id, game, status, srp, prev_srp):
     status_icon = "🔥" if status == "Hot" else "❄️" if status == "Cold" else ""
     processed_text = game.replace('-', ' ').upper()
-    last_updated = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    last_updated = datetime.now().strftime('%Y-%m-%d %H:%M')
+
+    if float(srp) > float(prev_srp):
+        srp_change_icon = "📈"
+    elif float(srp) < float(prev_srp):
+        srp_change_icon = "📉"
+    else:
+        srp_change_icon = ""
+
     message = (f"<b>{processed_text}</b>\nStatus : {status} {status_icon}\n"
-               f"SRP : <s>{prev_srp}%</s> -> {srp}%\n"
+               f"SRP : <s>{prev_srp}%</s> -> {srp}% {srp_change_icon}\n"
                f"<i>Last updated: {last_updated}</i>")
     try:
         await bot.edit_message_text(chat_id=telegram_channel_id, message_id=message_id, text=message, parse_mode=ParseMode.HTML)
@@ -110,7 +118,7 @@ async def check_and_handle_changes(game, status, srp):
     previous_results[game] = {
         "status": status,
         "SRP": srp,
-        "last_edited": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+        "last_edited": datetime.now().strftime('%Y-%m-%d %H:%M'),
         "message_id": new_message_id
     }
 
