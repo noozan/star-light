@@ -17,8 +17,8 @@ base_url = 'https://slotcatalog.com/en/slots'
 results_file = 'game_statuses.json'
 
 # Telegram bot token and channel ID
-telegram_bot_token = '7320334242:AAE2wIj6HoAcm8pBmdXUCR_5ylcSLDEkbMY'
-telegram_channel_id = '-1002193508333'
+telegram_bot_token = 'YOUR_TELEGRAM_BOT_TOKEN'
+telegram_channel_id = 'YOUR_TELEGRAM_CHANNEL_ID'
 
 
 # Initialize the Telegram bot
@@ -35,7 +35,10 @@ else:
 async def send_telegram_message(game, status, srp):
     status_icon = "🔥" if status == "Hot" else "❄️" if status == "Cold" else ""
     processed_text = game.replace('-', ' ').upper()
-    message = f"<b>{processed_text}</b>\nStatus : {status} {status_icon}\nSRP : {srp}%"
+    last_updated = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    message = (f"<b>{processed_text}</b>\nStatus : {status} {status_icon}\n"
+               f"SRP : {srp}%\n"
+               f"<i>Last updated: {last_updated}</i>")
     sent_message = await bot.send_message(chat_id=telegram_channel_id, text=message, parse_mode=ParseMode.HTML)
     return sent_message.message_id
 
@@ -50,7 +53,10 @@ async def delete_telegram_message(message_id):
 async def edit_telegram_message(message_id, game, status, srp, prev_srp):
     status_icon = "🔥" if status == "Hot" else "❄️" if status == "Cold" else ""
     processed_text = game.replace('-', ' ').upper()
-    message = f"<b>{processed_text}</b>\nStatus : {status} {status_icon}\nSRP : <s>{prev_srp}%</s> -> {srp}%"
+    last_updated = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    message = (f"<b>{processed_text}</b>\nStatus : {status} {status_icon}\n"
+               f"SRP : <s>{prev_srp}%</s> -> {srp}%\n"
+               f"<i>Last updated: {last_updated}</i>")
     try:
         await bot.edit_message_text(chat_id=telegram_channel_id, message_id=message_id, text=message, parse_mode=ParseMode.HTML)
     except BadRequest as e:
@@ -60,7 +66,6 @@ async def edit_telegram_message(message_id, game, status, srp, prev_srp):
             print(f"{datetime.now()} - Failed to edit message: {e}")
             return False
     return True
-
 
 # Function to check and handle changes
 async def check_and_handle_changes(game, status, srp):
@@ -79,14 +84,14 @@ async def check_and_handle_changes(game, status, srp):
         new_message_id = await send_telegram_message(game, status, srp)
     elif status == "Hot" and srp and previous_srp and float(srp) < float(previous_srp):
         if previous_message_id:
-            updated = await edit_telegram_message(previous_message_id, game, status, srp)
+            updated = await edit_telegram_message(previous_message_id, game, status, srp, previous_srp)
             if not updated:
                 new_message_id = await send_telegram_message(game, status, srp)
             else:
                 new_message_id = previous_message_id
     elif status == "Cold" and srp and previous_srp and float(srp) != float(previous_srp):
         if previous_message_id:
-            updated = await edit_telegram_message(previous_message_id, game, status, srp)
+            updated = await edit_telegram_message(previous_message_id, game, status, srp, previous_srp)
             if not updated:
                 new_message_id = await send_telegram_message(game, status, srp)
             else:
