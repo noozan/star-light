@@ -47,10 +47,10 @@ async def delete_telegram_message(message_id):
         print(f"{datetime.now()} - Failed to delete message: {e}")
 
 # Function to edit a message in the Telegram channel
-async def edit_telegram_message(message_id, game, status, srp):
+async def edit_telegram_message(message_id, game, status, srp, prev_srp):
     status_icon = "🔥" if status == "Hot" else "❄️" if status == "Cold" else ""
     processed_text = game.replace('-', ' ').upper()
-    message = f"<b>{processed_text}</b>\nStatus : {status} {status_icon}\nSRP : {srp}%"
+    message = f"<b>{processed_text}</b>\nStatus : {status} {status_icon}\nSRP : <s>{prev_srp}%</s> -> {srp}%"
     try:
         await bot.edit_message_text(chat_id=telegram_channel_id, message_id=message_id, text=message, parse_mode=ParseMode.HTML)
     except BadRequest as e:
@@ -60,6 +60,7 @@ async def edit_telegram_message(message_id, game, status, srp):
             print(f"{datetime.now()} - Failed to edit message: {e}")
             return False
     return True
+
 
 # Function to check and handle changes
 async def check_and_handle_changes(game, status, srp):

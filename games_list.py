@@ -11,6 +11,7 @@ games = [
     "Wanted-Dead-or-a-Wild",
     "Book-of-Dead",
     "Sweet-Bonanza",
-    "Big-Bass-Splash",
-    "Big-Bass-Bonanza"
+    "Rocket-Blast-Megaways",
+    "Candy-Blitz"
+
 ]
