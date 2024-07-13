@@ -63,9 +63,9 @@ async def edit_telegram_message(message_id, game, status, srp, prev_srp):
     last_updated = datetime.now().strftime('%Y-%m-%d %H:%M')
 
     if float(srp) > float(prev_srp):
-        srp_change_icon = "📈"
+        srp_change_icon = "⬆️"
     elif float(srp) < float(prev_srp):
-        srp_change_icon = "📉"
+        srp_change_icon = "⬇️"
     else:
         srp_change_icon = ""
 

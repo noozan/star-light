@@ -12,6 +12,7 @@ games = [
     "Book-of-Dead",
     "Sweet-Bonanza",
     "Rocket-Blast-Megaways",
-    "Candy-Blitz"
+    "Candy-Blitz",
+    "Dragon-Hero"
 
 ]
