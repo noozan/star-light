@@ -13,6 +13,7 @@ games = [
     "Sweet-Bonanza",
     "Rocket-Blast-Megaways",
     "Candy-Blitz",
-    "Dragon-Hero"
+    "Dragon-Hero",
+    "The-Hand-of-Midas"
 
 ]
