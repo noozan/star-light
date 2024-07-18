@@ -14,6 +14,7 @@ games = [
     "Rocket-Blast-Megaways",
     "Candy-Blitz",
     "Dragon-Hero",
-    "The-Hand-of-Midas"
+    "The-Hand-of-Midas",
+    "Frozen-Tropics"
 
 ]
