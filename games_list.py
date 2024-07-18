@@ -9,12 +9,12 @@ games = [
     "Sugar-Rush",
     "Fire-Portals",
     "Wanted-Dead-or-a-Wild",
-    "Book-of-Dead",
     "Sweet-Bonanza",
     "Rocket-Blast-Megaways",
     "Candy-Blitz",
     "Dragon-Hero",
     "The-Hand-of-Midas",
-    "Frozen-Tropics"
+    "Frozen-Tropics",
+    "Gold-Oasis"
 
 ]
