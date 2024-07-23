@@ -15,6 +15,8 @@ games = [
     "Dragon-Hero",
     "The-Hand-of-Midas",
     "Frozen-Tropics",
-    "Fat-Panda"
+    "Fat-Panda",
+    "Gates-of-Olympus-Dice",
+    "Moon-Princess-Christmas-Kingdom"
 
 ]
