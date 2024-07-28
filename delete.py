@@ -8,7 +8,7 @@ telegram_bot_token = '7320334242:AAE2wIj6HoAcm8pBmdXUCR_5ylcSLDEkbMY'
 telegram_channel_id = '-1002193508333'
 
 # Path to the file to be deleted
-file_path = '/var/star-light/ game_statuses.json'
+file_path = '/var/star-light/game_statuses.json'
 
 bot = Bot(token=telegram_bot_token)
 
